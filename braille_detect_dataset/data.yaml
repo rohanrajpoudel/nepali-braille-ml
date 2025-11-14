@@ -1,5 +1,0 @@
-path: c:\Users\rohan\Desktop\Now\braille\braille_detect_dataset
-train: images/train
-val: images/val
-nc: 47
-names: ['a', 'aa', 'ah', 'ai', 'am', 'au', 'ba', 'bha', 'cha', 'chha', 'da', 'da2', 'dha', 'dha2', 'e', 'ga', 'gha', 'gya', 'ha', 'i', 'ii', 'ja', 'jha', 'ka', 'kha', 'ksha', 'la', 'ma', 'na', 'na2', 'nga', 'nya', 'o', 'pa', 'pha', 'ra', 'sa', 'sha', 'shha', 'ta', 'ta2', 'tha', 'tha2', 'u', 'uu', 'va', 'ya']
