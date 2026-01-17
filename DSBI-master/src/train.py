@@ -5,29 +5,47 @@ from model import BddNet
 from utils import visualize
 
 def train(train_list, base_dir, save_path="checkpoints", epochs=100):
+    print(">>> Starting training function")
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(">>> Device:", device)
+
     model = BddNet().to(device)
+    print(">>> Model loaded")
+
     dataset = BrailleDataset(train_list, base_dir)
-    loader = DataLoader(dataset, batch_size=2, shuffle=True)
+    print(">>> Dataset size:", len(dataset))
+
+    loader = DataLoader(
+        dataset,
+        batch_size=2,
+        shuffle=True,
+        num_workers=0,      # IMPORTANT (Windows)
+        pin_memory=False
+    )
+    print(">>> DataLoader ready")
+
     opt = torch.optim.Adam(model.parameters(), lr=1e-4)
     loss_fn = torch.nn.MSELoss()
 
-    os.makedirs(save_path, exist_ok=True)
-    for epoch in range(1, epochs+1):
+    for epoch in range(1, epochs + 1):
+        print(f">>> Epoch {epoch} started")
         model.train()
-        total_loss = 0
-        for imgs, gts in loader:
+
+        for i, (imgs, gts) in enumerate(loader):
+            print(f"   Batch {i} loaded")
+
             imgs, gts = imgs.to(device), gts.to(device)
+
             opt.zero_grad()
             preds = model(imgs)
             loss = loss_fn(preds, gts)
             loss.backward()
             opt.step()
-            total_loss += loss.item()
-        print(f"Epoch {epoch}/{epochs}  Loss: {total_loss/len(loader):.5f}")
-        if epoch % 10 == 0:
-            torch.save(model.state_dict(), f"{save_path}/bddnet_epoch{epoch}.pt")
-    print("Training complete.")
+
+            print(f"   Batch {i} loss: {loss.item():.6f}")
+
+        print(f">>> Epoch {epoch} finished")
 
 # inside train.py main section (at the bottom)
 if __name__ == "__main__":
