@@ -1,3 +1,7 @@
 v
 /synthetic_braille_dataset/
 /DSBI-master/src/checkpoints/
+Braille.v1i.coco/patched_dataset
+Braille.v1i.coco/train
+Braille.v1i.coco/train_preprocessed
+Braille.v1i.coco/runs
