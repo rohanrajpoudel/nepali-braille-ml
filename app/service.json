@@ -1,0 +1,30 @@
+﻿{
+    "launchType":  "FARGATE",
+    "loadBalancers":  [
+                          {
+                              "containerPort":  8080,
+                              "targetGroupArn":  "arn:aws:elasticloadbalancing:us-east-1:276392464350:targetgroup/braille-api-tg/22d24a036d840e4b",
+                              "containerName":  "braille-api"
+                          }
+                      ],
+    "serviceName":  "braille-api-service",
+    "networkConfiguration":  {
+                                 "awsvpcConfiguration":  {
+                                                             "subnets":  [
+                                                                             "subnet-04bb3c891122e973e",
+                                                                             "subnet-0f838b0b26ffe29c6",
+                                                                             "subnet-034a91b99f957afb5",
+                                                                             "subnet-0141ee91d2c90b99f",
+                                                                             "subnet-09deea5b7670bc10e",
+                                                                             "subnet-071dc1c50bd2e62f7"
+                                                                         ],
+                                                             "assignPublicIp":  "ENABLED",
+                                                             "securityGroups":  [
+                                                                                    "sg-0aacb3f2809a40013"
+                                                                                ]
+                                                         }
+                             },
+    "cluster":  "braille-api-cluster",
+    "taskDefinition":  "nepali-braille-api",
+    "desiredCount":  1
+}
