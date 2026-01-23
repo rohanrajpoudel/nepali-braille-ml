@@ -12,6 +12,7 @@ import logging
 from detector import detect_dots
 from grid import braille_grid_detection
 from decoder import decode_braille_lines, braille_map
+from gemini_client import call_gemini_clean_text
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -83,13 +84,18 @@ async def detect(file: UploadFile = File(...)):
         
         # Step 3: Decode to text
         text = decode_braille_lines(braille_bins, braille_map)
-        
+
+        # Step 4: Post-process with Gemini (if API key configured)
+        cleaned_text = call_gemini_clean_text(text)
+
         return JSONResponse(
             status_code=200,
             content={
                 "success": True,
                 "dot_count": len(dots),
-                "text": text,
+                "obr_text": text,
+                "clean_text": cleaned_text or text,
+                "used_gemini": cleaned_text is not None,
                 "lines_detected": len(braille_bins)
             }
         )
