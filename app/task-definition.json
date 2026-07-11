@@ -1,30 +1,36 @@
 {
   "family": "braille-api",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::276392464350:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "braille-api",
       "image": "276392464350.dkr.ecr.us-east-1.amazonaws.com/nepali-braille-api:latest",
-      "cpu": 256,
-      "memory": 512,
+      "cpu": 512,
+      "memory": 1024,
       "portMappings": [
         {
-          "containerPort": 8080,  
-          "hostPort": 8080,
-          "protocol": "tcp"
+          "containerPort": 8080,
+          "protocol": "tcp",
+          "hostPort": 8080
         }
       ],
       "essential": true,
       "environment": [],
       "mountPoints": [],
       "volumesFrom": [],
-      "systemControls": []
+      "systemControls": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/nepali-braille-api",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
     }
-  ],
-  "executionRoleArn": "arn:aws:iam::276392464350:role/ecsTaskExecutionRole",
-  "networkMode": "awsvpc",
-  "requiresCompatibilities": [
-    "FARGATE"
-  ],
-  "cpu": "256",
-  "memory": "512"
+  ]
 }
