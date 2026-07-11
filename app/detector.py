@@ -9,13 +9,15 @@ import torch
 from torchvision.ops import nms
 
 # Load model once at module level
-MODEL_PATH = "models/best.pt"
+# MODEL_PATH = "models/best.pt"
+# Version 1.0.1: best_01.pt
+MODEL_PATH = "models/best_03.pt"
 model = YOLO(MODEL_PATH)
 
 # Detection parameters
-TILE_SIZE = 256
-STRIDE = int(TILE_SIZE * 0.75)  # 192 ~25% overlap
-CONF_THRESH = 0.5
+TILE_SIZE = 320
+STRIDE = int(TILE_SIZE * 0.80)  # 20% overlap
+CONF_THRESH = 0.20
 MAX_ASPECT_RATIO = 1.2  # square tolerance
 NMS_IOU = 0.2  # aggressive overlap removal
 
@@ -115,6 +117,14 @@ def detect_dots(image):
     dots = []
     for box in final_boxes:
         x1, y1, x2, y2 = box
+
+        # Compute box area
+        area = (x2 - x1) * (y2 - y1)
+
+        # Skip boxes outside the desired area range
+        if area < 120 or area > 320:
+            continue
+
         cx = (x1 + x2) / 2
         cy = (y1 + y2) / 2
         dots.append((cx, cy))

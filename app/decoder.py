@@ -309,4 +309,5 @@ def render_nepali_text(token_lines, half_consonant_symbol_map):
         output_lines.append(''.join(result))
 
     # return output_lines
+    # return token_lines
     return ''.join(output_lines)

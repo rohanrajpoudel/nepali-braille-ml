@@ -12,6 +12,7 @@ import logging
 from detector import detect_dots
 from grid import braille_grid_detection
 from decoder import decode_braille_lines, render_nepali_text, braille_map_text, braille_map_number, half_consonant_symbol_map
+from gemini_client import clean_braille_text
 # from gemini_client import clean_braille_text
 
 # Configure logging
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="Nepali Braille OBR API",
     description="Object to Braille Recognition API for converting Braille images to text",
-    version="1.0.0"
+    version="1.0.1"
 )
 
 # Expected image dimensions
@@ -79,27 +80,30 @@ async def detect(file: UploadFile = File(...)):
             )
         
         # Step 2: Grid detection and binary conversion
-        _, braille_bins = braille_grid_detection(dots, theta=5.0, D_dis=3.0)
+        theta=5.0
+        D_dis=3.0
+        _, braille_bins = braille_grid_detection(dots, theta, D_dis, image)
         logger.info(f"Detected {len(braille_bins)} text lines")
         
         # Step 3: Decode to text
         text = decode_braille_lines(braille_bins, braille_map_text, braille_map_number)
-        cleaned_text = render_nepali_text(text, half_consonant_symbol_map)
+        obr_text = render_nepali_text(text, half_consonant_symbol_map)
 
         # Step 4: Post-process with Gemini (if API key configured)
 
         #no longer using gemini for post-processing
-        # cleaned_text = clean_braille_text(text)
+        cleaned_text = clean_braille_text(text)
 
         return JSONResponse(
             status_code=200,
             content={
                 "success": True,
                 "dot_count": len(dots),
-                # "obr_text": text,
+                "obr_text": obr_text,
                 "clean_text": cleaned_text or text,
-                # "used_gemini": cleaned_text is not None,
-                "lines_detected": len(braille_bins)
+                "used_gemini": cleaned_text is not None,
+                "lines_detected": len(braille_bins),
+                "image": "/temp/viz.jpg"
             }
         )
         

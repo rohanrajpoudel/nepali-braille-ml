@@ -3,9 +3,10 @@
 Braille grid detection and binary representation conversion.
 """
 import numpy as np
+import cv2
 
 
-def braille_grid_detection(points, theta, D_dis):
+def braille_grid_detection(points, theta, D_dis, image):
     """
     Implements the Braille Character Recognition algorithm to detect the grid for characters.
 
@@ -192,5 +193,82 @@ def braille_grid_detection(points, theta, D_dis):
             cell_bins.append(','.join(map(str, bin_list)))
         
         braille_bins.append(cell_bins)
-    
+
+    image = visualize_braille_grid_points(image, b_cell_info, "./temp/viz.jpg")
+
     return b_cell_info, braille_bins
+
+def visualize_braille_grid_points(
+    image,
+    b_cell_info,
+    save_path=None,
+    radius=2,
+    color=(0, 0, 255),
+    thickness=-1,
+    draw_labels=False,
+):
+    """
+    Draw the Braille grid points that were retained for cell formation.
+
+    Parameters
+    ----------
+    image : np.ndarray
+        Original image (BGR, OpenCV format).
+
+    b_cell_info : list[(x, y)]
+        Output from braille_grid_detection().
+        These are the occupied grid intersection points.
+
+    save_path : str, optional
+        If provided, saves the visualization.
+
+    radius : int
+        Radius of each drawn point.
+
+    color : tuple
+        BGR color of the dots.
+        Default: Red.
+
+    thickness : int
+        Circle thickness.
+        -1 = filled.
+
+    draw_labels : bool
+        Draw point indices for debugging.
+
+    Returns
+    -------
+    np.ndarray
+        Image with overlay.
+    """
+
+    vis = image.copy()
+
+    for idx, (x, y) in enumerate(b_cell_info):
+        center = (int(round(x)), int(round(y)))
+
+        cv2.circle(
+            vis,
+            center,
+            radius,
+            color,
+            thickness,
+            lineType=cv2.LINE_AA,
+        )
+
+        if draw_labels:
+            cv2.putText(
+                vis,
+                str(idx),
+                (center[0] + 8, center[1] - 8),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.45,
+                (0, 255, 0),
+                1,
+                cv2.LINE_AA,
+            )
+
+    if save_path is not None:
+        cv2.imwrite(save_path, vis)
+
+    return vis

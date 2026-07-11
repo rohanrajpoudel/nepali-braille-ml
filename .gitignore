@@ -5,3 +5,9 @@ Braille.v1i.coco/patched_dataset
 Braille.v1i.coco/train
 Braille.v1i.coco/train_preprocessed
 Braille.v1i.coco/runs
+
+annotation\annotatedFiles
+annotation\images
+annotation\labels
+annotation\sliced
+annotation
