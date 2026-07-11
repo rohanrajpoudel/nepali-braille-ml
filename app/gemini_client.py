@@ -16,8 +16,8 @@ def build_prompt(raw_text: str) -> str:
     )
 
 def clean_braille_text(raw_text: str) -> str:
-    if not raw_text.strip():
-        return raw_text
+    # if not raw_text.strip():
+        # return raw_text
 
     response = client.models.generate_content(
         model="gemini-3-flash-preview",
