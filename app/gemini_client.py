@@ -1,7 +1,7 @@
 from google import genai
 
 # Initialize the client with your API key
-client = genai.Client(api_key="AIzaSyBQDocGZolRPLkK8qxDz84rjsQAyrTGV9w")  # keep this secret!
+client = genai.Client(api_key="xyz")  # keep this secret!
 
 
 def build_prompt(raw_text: str) -> str:
