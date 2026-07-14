@@ -11,3 +11,6 @@ annotation\images
 annotation\labels
 annotation\sliced
 annotation
+
+app/temp
+app\__pycache__
