@@ -13,4 +13,6 @@ annotation\sliced
 annotation
 
 app/temp
-app\__pycache__
+app/__pycache__
+__pycache__
+.venv
